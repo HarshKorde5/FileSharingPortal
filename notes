@@ -12,3 +12,13 @@ ip address
 search for ip address range 
 can we search for open ports in a ip range
 can we connect to them
+
+
+
+
+
+
+//turn on hostpot using terminal
+sudo apt-get install network-manager
+sudo nmcli dev wifi hotspot ssid MyHotspot password password123
+nmcli dev wifi show-password
