@@ -7,31 +7,34 @@ class configHotspot
     {
         try
         {
-            // List<String> command = new ArrayList<String>();
-            // command.add("nmcli dev wifi hotspot ssid filesharing password fileshare");
             
             String[] turnOn = {"nmcli","dev","wifi","hotspot","ssid","filesharing","password","fileshare"};
             String[] turnOf = {"nmcli","connection","down","Hotspot-2"};
 
-            // String[] args = {"dev wifi hotspot ssid filesharing password fileshare"};
+
+            //Turning on the hotspot
 
             ProcessBuilder pb = new ProcessBuilder(turnOn);
-
             Process process = pb.start();
 
+            //Reading and displaying the output after command execution
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
             String line;
 
-            System.out.println("This is the output after connection start");
 
+            StringBuilder output = new StringBuilder();
+
+            System.out.println("This is the output after connection start");
             while((line = reader.readLine())!= null)
             {
+                output.append(line);
                 System.out.println(line);
             }
 
+            //wait for completion of the executing process i.e turning on hotspot
             process.waitFor();
 
+            //demo code for turning off the hotspot
             while(true)
             {
                 System.out.println("Do you want to stop the hotspot theatering? (y/n)");
