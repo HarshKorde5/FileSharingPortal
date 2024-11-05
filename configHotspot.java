@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 class configHotspot
 {
@@ -9,7 +11,7 @@ class configHotspot
         {
             
             String[] turnOn = {"nmcli","dev","wifi","hotspot","ssid","filesharing","password","fileshare"};
-            String[] turnOf = {"nmcli","connection","down","Hotspot-2"};
+            String[] turnOf = {"nmcli","connection","down",""};
 
 
             //Turning on the hotspot
@@ -33,6 +35,17 @@ class configHotspot
 
             //wait for completion of the executing process i.e turning on hotspot
             process.waitFor();
+
+
+            //Extract the uuid from output recieved
+            String str = output.toString();
+            String regex = "[,\\.\\''\\s]";
+            String[] myArray = str.split(regex);
+            String UUID = myArray[8];
+
+            System.out.println("UUID :: "+UUID);
+
+            turnOf[turnOf.length-1] = UUID;
 
             //demo code for turning off the hotspot
             while(true)
