@@ -1,7 +1,7 @@
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-// import javax.swing.border.LineBorder;
+
 
 class loginWindow extends FocusAdapter implements ActionListener
 {
@@ -21,6 +21,8 @@ class loginWindow extends FocusAdapter implements ActionListener
         frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        
 
         headerLabel = new JLabel("Log in");
         headerLabel.setBounds(220,70,200,80);
