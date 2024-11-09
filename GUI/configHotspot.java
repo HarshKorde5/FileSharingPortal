@@ -1,32 +1,34 @@
 import java.io.*;
 import java.util.*;
 
-class startHotspot
+class configHotspot
 {
-    public String userName;
+    public String hotspotName;
     public String UUID;
     Scanner sc;
-    public startHotspot(String name)
+    public boolean startedHotspot;
+
+    public configHotspot(String name)
     {
+        startedHotspot = false;
         sc = new Scanner(System.in);
         UUID = "";
-        this.userName = name+"room";
-        System.out.println(userName);
+        this.hotspotName = name+"room";
+        System.out.println(hotspotName);
     }
 
     public void stopHotspot()
     {
         String[] turnOf = {"nmcli","connection","down",this.UUID};
         
-        
-            String output = executeCommand(turnOf);
-        
+        String output = executeCommand(turnOf);
+        this.startedHotspot = false;
     }
 
 
     public String executeCommand(String cmd[])
     {
-            StringBuilder output = new StringBuilder();
+        StringBuilder output = new StringBuilder();
 
         try
         {
@@ -52,7 +54,8 @@ class startHotspot
         {
             System.out.println(e);
         }
-            return output.toString();
+            
+        return output.toString();
 
     }
 
@@ -71,11 +74,11 @@ class startHotspot
 
     public void createHotspot()
     {
-        String[] turnOn = {"nmcli","dev","wifi","hotspot","ssid",this.userName,"password","fileshare"};
+        String[] turnOn = {"nmcli","dev","wifi","hotspot","ssid",this.hotspotName,"password","fileshare"};
         String output = executeCommand(turnOn);
         String UUID = extractUUID(output);
+        this.startedHotspot = true;
         this.UUID = UUID;
-
     }
 
     public void monitorConenction(String connectionName)
@@ -131,14 +134,3 @@ class startHotspot
     }
 }
 
-
-class configHotspot
-{
-    public static void main(String arg[])
-    {
-        startHotspot s = new startHotspot("Harsh");
-        s.createHotspot();
-        monitorConenction(userName);
-        s.stopHotspot();
-    }
-}

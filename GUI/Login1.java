@@ -15,10 +15,24 @@ class loginWindow
     public selectPanel sobj;
     public sendPanel sendObj;
     public recievePanel recieveObj;
-    public static String userName = "";
+    public String userName,room;
+    public boolean roomFound,connected,reqAccepted,started;
+    public configHotspot hotspot;
+    public configWifi wifi;
+
+    public loginWindow()
+    {
+        roomFound = false;
+        connected = false;
+        reqAccepted = false;
+        userName = "";
+        room = "";
+    }
 
     public void displayWindow()
     {
+        
+
         frame = new JFrame("File Sharing Portal");    
         frame.setIconImage(new ImageIcon("file.jpg").getImage());
         frame.setSize(600,600);
@@ -71,8 +85,19 @@ class loginWindow
             public void actionPerformed(ActionEvent ae2)
             {
                 sendObj.helloLabel.setText("Hello "+userName+"!");
-                sendObj.userName = userName;
+                sendObj.infoLabel.setText("<html><h3>Ask the other user to click \"Join\" and \"Send request\" for connection to \""+userName+"room\"</h3></html>");
+                sendObj.getuserName(userName);
+
                 crd.show(mainPanel,"4");
+
+                //code to turn on hotspot
+
+                hotspot = new configHotspot(userName);
+
+                hotspot.createHotspot();
+
+                recieveObj.availabelLabel.setText("Available rooms : "+userName+"room");
+                
             }
         });
 
@@ -80,8 +105,72 @@ class loginWindow
             public void actionPerformed(ActionEvent ae3)
             {
                 recieveObj.helloLabel.setText("Hello "+userName+"!");
+                recieveObj.infoLabel.setText("<html><h3>Ask the other user to click \"Create\" and \"Accept\" the connection request from \""+userName+"\"</h3></html>");
                 recieveObj.userName = userName;
+                recieveObj.sendreqButton.setEnabled(false);
                 crd.show(mainPanel,"3");
+                //code to turn on wifi
+                wifi = new configWifi();
+
+
+                room = wifi.searchRoom();
+                    
+
+                if(room.equals("0"))
+                {
+                    recieveObj.sendreqButton.setEnabled(false);
+                }
+                else
+                {
+                    recieveObj.availabelLabel.setText("Available rooms : "+room);
+                    roomFound = true;
+                    recieveObj.sendreqButton.setEnabled(true);
+                    connected = wifi.connectRoom();
+                }
+
+            }
+        });
+
+
+        sendObj.acceptButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae4)
+            {
+                reqAccepted = true;
+            }
+        });
+
+        sendObj.denyButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae5)
+            {
+                reqAccepted = false;
+            }
+        });
+
+        recieveObj.sendreqButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae6)
+            {
+                if(roomFound)
+                { 
+                    try
+                    {
+                        connected = startWifi.connectRoom(room);
+
+                    }
+                    catch(Exception eobj1){}
+
+                    if(connected)
+                    {
+                        System.out.println("Connection successful to "+room+", ready to share!");
+                    }
+                    else
+                    {
+                        System.out.println("Connection to the room "+room+" failed, try again!");
+                    }
+                }
+                else
+                {
+                    System.out.println("Room not found");
+                }
             }
         });
     }

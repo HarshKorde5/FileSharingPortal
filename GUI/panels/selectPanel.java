@@ -46,7 +46,6 @@ public class selectPanel extends JPanel
     {
         this.userName = name;
         welcomeLabel.setText("Welcome "+userName+"!");
-        
     }
 
 }

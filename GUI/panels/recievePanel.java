@@ -9,8 +9,10 @@ public class recievePanel extends JPanel
 {
 
     public JPanel rpanel;
-    public JLabel helloLabel,joiningLabel,infoLabel;
-    public static String userName = "";
+    public JLabel helloLabel,joiningLabel,infoLabel,availabelLabel;
+    public String userName;
+    public JButton sendreqButton;
+
     public recievePanel()
     {
         rpanel = new JPanel();
@@ -24,10 +26,21 @@ public class recievePanel extends JPanel
         joiningLabel.setFont(new Font("Calibri",Font.BOLD,20));
 
         infoLabel = new JLabel("Ask the other user to click \"Create\" and\n \"Accept\" the connection request from \""+userName+"\"");
-        infoLabel.setBounds(10,500,550,50);
+        infoLabel.setBounds(10,450,550,50);
+
+        availabelLabel = new JLabel("Available rooms : ");
+        availabelLabel.setBounds(10,250,550,50);
+        availabelLabel.setFont(new Font("Calibri",Font.BOLD,25));
+
+        sendreqButton = new JButton("Send Request");
+        sendreqButton.setBounds(200,320,200,50);
+        sendreqButton.setEnabled(false);
+
         rpanel.add(helloLabel);
         rpanel.add(joiningLabel);
         rpanel.add(infoLabel);
+        rpanel.add(availabelLabel);
+        rpanel.add(sendreqButton);
     }
 
 
