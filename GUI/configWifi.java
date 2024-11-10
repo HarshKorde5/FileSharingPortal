@@ -43,6 +43,7 @@ class configWifi
     
     }
 
+
     public String getSSID(String output)
     {
         String trimmed = output.replace("\n"," ").replace("\r"," ");
@@ -100,7 +101,6 @@ class configWifi
             connected = false;
         }
         
-        System.out.println(output);
         
         if(connected)
         {

@@ -8,7 +8,7 @@ public class selectPanel extends JPanel
 {
     public JPanel spanel;
     public JButton logoutButton,createButton,joinButton;
-    public String userName;
+    public String hotspotName;
     public JLabel welcomeLabel,orLabel;
 
     public selectPanel()
@@ -42,10 +42,10 @@ public class selectPanel extends JPanel
 
     }
 
-    public void getuserName(String name)
+    public void gethotspotName(String name)
     {
-        this.userName = name;
-        welcomeLabel.setText("Welcome "+userName+"!");
+        this.hotspotName = name;
+        welcomeLabel.setText("Welcome "+hotspotName+"!");
     }
 
 }

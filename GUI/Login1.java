@@ -3,8 +3,10 @@ import javax.swing.*;
 import java.awt.*;
 import panels.loginPanel;
 import panels.selectPanel;
-import panels.sendPanel;
-import panels.recievePanel;
+import panels.createPanel;
+import panels.joinPanel;
+
+
 
 class loginWindow
 {
@@ -13,8 +15,8 @@ class loginWindow
     public CardLayout crd;
     public loginPanel lobj;
     public selectPanel sobj;
-    public sendPanel sendObj;
-    public recievePanel recieveObj;
+    public createPanel createObj;
+    public joinPanel joinObj;
     public String userName,room;
     public boolean roomFound,connected,reqAccepted,started;
     public configHotspot hotspot;
@@ -51,13 +53,13 @@ class loginWindow
 
         lobj = new loginPanel();
         sobj = new selectPanel();
-        sendObj = new sendPanel();
-        recieveObj = new recievePanel();
+        createObj = new createPanel();
+        joinObj = new joinPanel();
 
         mainPanel.add("1",lobj.lpanel);
         mainPanel.add("2",sobj.spanel);
-        mainPanel.add("3",recieveObj.rpanel);
-        mainPanel.add("4",sendObj.spanel);
+        mainPanel.add("3",joinObj.rpanel);
+        mainPanel.add("4",createObj.spanel);
 
         frame.add(mainPanel);
         
@@ -84,9 +86,9 @@ class loginWindow
         sobj.createButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae2)
             {
-                sendObj.helloLabel.setText("Hello "+userName+"!");
-                sendObj.infoLabel.setText("<html><h3>Ask the other user to click \"Join\" and \"Send request\" for connection to \""+userName+"room\"</h3></html>");
-                sendObj.getuserName(userName);
+                createObj.helloLabel.setText("Hello "+userName+"!");
+                createObj.infoLabel.setText("<html><h3>Ask the other user to click \"Join\" and \"Send request\" for connection to \""+userName+"room\"</h3></html>");
+                createObj.getuserName(userName);
 
                 crd.show(mainPanel,"4");
 
@@ -96,7 +98,7 @@ class loginWindow
 
                 hotspot.createHotspot();
 
-                recieveObj.availabelLabel.setText("Available rooms : "+userName+"room");
+                joinObj.availabelLabel.setText("Available rooms : "+userName+"room");
                 
             }
         });
@@ -104,10 +106,10 @@ class loginWindow
         sobj.joinButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae3)
             {
-                recieveObj.helloLabel.setText("Hello "+userName+"!");
-                recieveObj.infoLabel.setText("<html><h3>Ask the other user to click \"Create\" and \"Accept\" the connection request from \""+userName+"\"</h3></html>");
-                recieveObj.userName = userName;
-                recieveObj.sendreqButton.setEnabled(false);
+                joinObj.helloLabel.setText("Hello "+userName+"!");
+                joinObj.infoLabel.setText("<html><h3>Ask the other user to click \"Create\" and \"Accept\" the connection request from \""+userName+"\"</h3></html>");
+                joinObj.userName = userName;
+                joinObj.sendreqButton.setEnabled(false);
                 crd.show(mainPanel,"3");
                 //code to turn on wifi
                 wifi = new configWifi();
@@ -118,13 +120,13 @@ class loginWindow
 
                 if(room.equals("0"))
                 {
-                    recieveObj.sendreqButton.setEnabled(false);
+                    joinObj.sendreqButton.setEnabled(false);
                 }
                 else
                 {
-                    recieveObj.availabelLabel.setText("Available rooms : "+room);
+                    joinObj.availabelLabel.setText("Available rooms : "+room);
                     roomFound = true;
-                    recieveObj.sendreqButton.setEnabled(true);
+                    joinObj.sendreqButton.setEnabled(true);
                     connected = wifi.connectRoom();
                 }
 
@@ -132,21 +134,21 @@ class loginWindow
         });
 
 
-        sendObj.acceptButton.addActionListener(new ActionListener(){
+        createObj.acceptButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae4)
             {
                 reqAccepted = true;
             }
         });
 
-        sendObj.denyButton.addActionListener(new ActionListener(){
+        createObj.denyButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae5)
             {
                 reqAccepted = false;
             }
         });
 
-        recieveObj.sendreqButton.addActionListener(new ActionListener(){
+        joinObj.sendreqButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae6)
             {
                 if(roomFound)
