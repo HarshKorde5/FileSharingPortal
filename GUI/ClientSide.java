@@ -3,6 +3,9 @@ import java.io.*;
 
 class ClientSide
 {
+    public DataInputStream din;
+    public DataOutputStream dout;
+
     public String executeCommand(String cmd[])
     {
         StringBuilder output = new StringBuilder();
@@ -47,6 +50,34 @@ class ClientSide
         return splitted[2];
     }
 
+
+    public void sendFile(String path)
+    {
+        int bytes = 0;
+        try
+        {
+            File file = new File(path);
+            FileInputStream filein = new FileInputStream(file);
+
+            dout.writeLong(file.length());
+
+            byte buffer[] = new byte[4*1024];
+
+            while((bytes = filein.read(buffer)) != -1)
+            {
+                dout.write(buffer,0,bytes);
+                dout.flush();
+            }
+
+            filein.close();
+
+        }
+        catch(Exception e)
+        {
+
+        }
+    }
+
     public void createClient()
     {
         try
@@ -59,23 +90,20 @@ class ClientSide
 
         Socket s = new Socket(ip,2100);
 
-        PrintStream ps = new PrintStream(s.getOutputStream());
+        DataInputStream din = new DataInputStream(s.getInputStream());
+        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
 
-        BufferedReader br1 = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        BufferedReader br2 = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Sending file to server");
+        sendFile("/file.jpg");
 
-        String str1,str2;
-        while(!(str1 = br2.readLine()).equals("end"))
-        {
-            ps.println(str1);
-            System.out.println("Enter message for server : ");
-            str2 = br1.readLine();
-            System.out.println("Server says : "+str2);
-        }
-        System.out.println("Thank you for using chat messanger...");
+        din.close();
+        dout.close();
+        
+        System.out.println("File sent");
         }
         catch(Exception E)
         {
+            System.out.println("File not sent");
             System.out.println(E);
         }
     }
