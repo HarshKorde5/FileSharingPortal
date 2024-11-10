@@ -142,17 +142,16 @@ class loginWindow
                 try{Thread.sleep(300);}catch(Exception e){}
 
                 server = new ServerSide();
-                server.startServer();
 
-                // timer1 = new Timer(10000,new ActionListener(){
-                //     public void actionPerformed(ActionEvent a)
-                //     {
-                //         server.startServer();
+                timer1 = new Timer(5000,new ActionListener(){
+                    public void actionPerformed(ActionEvent a)
+                    {
+                        server.startServer();
 
-                //     }
-                // });
+                    }
+                });
 
-                // timer1.start();
+                timer1.start();
 
             }
         });
@@ -195,7 +194,16 @@ class loginWindow
                 try{Thread.sleep(300);}catch(Exception e){}
 
                 client = new ClientSide();
-                client.createClient();
+
+                timer1 = new Timer(15000,new ActionListener(){
+                    public void actionPerformed(ActionEvent a)
+                    {
+                        client.createClient();
+                    }
+                });
+
+                timer1.start();
+
 
             }
         });
