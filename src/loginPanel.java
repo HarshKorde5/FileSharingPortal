@@ -1,10 +1,8 @@
-package panels;
-
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class loginPanel extends Panel
+class loginPanel extends JPanel
 {
     public JLabel headerLabel,startSharingLabel;
     public JTextField usernameField;

@@ -1,13 +1,7 @@
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-import panels.loginPanel;
-import panels.selectPanel;
-import panels.createPanel;
-import panels.joinPanel;
-import panels.successfulPanel;
-import panels.unsuccessfulPanel;
-import panels.sharingPanel;
+
 
 class loginWindow
 {
@@ -22,9 +16,7 @@ class loginWindow
     public boolean roomFound,connected,reqAccepted,started;
     public configHotspot hotspot;
     public configWifi wifi;
-    public successfulPanel successful;
-    public unsuccessfulPanel unsuccessful;
-    public sharingPanel sharing;
+    public sharingPanel sharingObj;
     public ClientSide client ;
     public ServerSide server;
 
@@ -61,7 +53,7 @@ class loginWindow
         frame.setSize(600,600);
         // frame.setLayout(null);
         frame.setLocationRelativeTo(null);
-        // frame.setResizable(false);
+        frame.setResizable(false);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -76,16 +68,13 @@ class loginWindow
         sobj = new selectPanel();
         createObj = new createPanel();
         joinObj = new joinPanel();
-        successful = new successfulPanel();
-        unsuccessful = new unsuccessfulPanel();
-        sharing = new sharingPanel();
+        sharingObj = new sharingPanel();
 
         mainPanel.add("1",lobj.lpanel);
         mainPanel.add("2",sobj.spanel);
         mainPanel.add("3",joinObj.jpanel);
         mainPanel.add("4",createObj.cpanel);
-        
-        mainPanel.add("7",sharing.sharingpanel);
+        mainPanel.add("7",sharingObj.sharingpanel);
 
         frame.add(mainPanel);
         
@@ -129,7 +118,8 @@ class loginWindow
                 crd.show(mainPanel,"4");
 
                 createObj.startProgress();
-                
+
+
                 timer = new Timer(10000,new ActionListener(){
                     public void actionPerformed(ActionEvent a)
                     {
@@ -138,20 +128,20 @@ class loginWindow
                 });
         
                 timer.start();
-
                 try{Thread.sleep(300);}catch(Exception e){}
-
-                server = new ServerSide();
 
                 timer1 = new Timer(5000,new ActionListener(){
                     public void actionPerformed(ActionEvent a)
                     {
-                        server.startServer();
+                        // server = new ServerSide();
+
+                        // server.startServer();
 
                     }
                 });
 
                 timer1.start();
+
 
             }
         });
@@ -182,6 +172,10 @@ class loginWindow
                 joinObj.startProgress();
 
                 
+
+
+
+
                 timer = new Timer(10000,new ActionListener(){
                     public void actionPerformed(ActionEvent a)
                     {
@@ -193,21 +187,20 @@ class loginWindow
 
                 try{Thread.sleep(300);}catch(Exception e){}
 
-                client = new ClientSide();
-
                 timer1 = new Timer(15000,new ActionListener(){
                     public void actionPerformed(ActionEvent a)
                     {
-                        client.createClient();
+                        // client = new ClientSide();
                     }
                 });
 
                 timer1.start();
 
-
             }
         });
 
+
+        
 
     }
 }

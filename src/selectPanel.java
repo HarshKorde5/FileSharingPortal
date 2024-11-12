@@ -1,10 +1,9 @@
-package panels;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class selectPanel extends JPanel
+class selectPanel extends JPanel
 {
     public JPanel spanel;
     public JButton logoutButton,createButton,joinButton;

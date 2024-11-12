@@ -90,7 +90,7 @@ class configWifi
         }
 
         boolean connected = true;
-        String password = "fileshare";
+        String password = "rajankord81";
 
         String[] turnOn = {"nmcli","device","wifi","connect",SSID,"password",password};
 
