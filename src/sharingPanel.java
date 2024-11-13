@@ -16,12 +16,14 @@ class sharingPanel extends JPanel
 
     public JFileChooser filechooser;
     private File selectedFile;
+    private ServerSide server;
+    private ClientSide client;
     
-    public sharingPanel(ServerSide server)
-    {}
-    
-    public sharingPanel(ClientSide client)
-    {}
+    public sharingPanel(ServerSide server,ClientSide client)
+    {
+        this.server = server;
+        this.client = client;
+    }
 
     public sharingPanel()
     {
@@ -84,7 +86,24 @@ class sharingPanel extends JPanel
                 int result = JOptionPane.showConfirmDialog(sharingpanel,"Sure?You want to stop sharing and exit?","Confirm Exit",JOptionPane.YES_NO_OPTION);
 
                 System.out.println(result);
-                if(result == 0) System.exit(0);
+
+                
+                if(result == 0)
+                {
+                    if(server != null)
+                    {
+                        server.stopSharing();
+                    }
+                    else
+                    {
+                        client.stopSharing();
+                    }
+
+                    JOptionPane.showMessageDialog(sharingpanel,"Hope you had a good experience,Thankyou!","Thank-you",JOptionPane.INFORMATION_MESSAGE);
+                    
+                    System.exit(0);
+                }
+
 
             }
         });
@@ -134,9 +153,33 @@ class sharingPanel extends JPanel
         else
         {
             confirmFileLabel.setText("<html><h3>Do you want to send : </h3></html>");
-            System.out.println("File sent!");
-            JOptionPane.showMessageDialog(confirmFileLabel,"File sent","Alert",JOptionPane.INFORMATION_MESSAGE);
+
+            int result = JOptionPane.showConfirmDialog(sharingpanel,"Do you want to send file : "+selectedFile.getName(),"Confirm Exit",JOptionPane.YES_NO_OPTION);
+
+            if(result == 0)
+            {
+                if(server != null)
+                {
+                    server.sendFile(selectedFile);
+                }
+                else
+                {
+                    client.sendFile(selectedFile);
+                }
+                System.out.println("File sent!");
+                JOptionPane.showMessageDialog(confirmFileLabel,"File sent","Alert",JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(confirmFileLabel,"File not sent","Alert",JOptionPane.INFORMATION_MESSAGE);
+            }
 
         }
+    }
+
+    public void setDriver(ServerSide s,ClientSide c)
+    {
+        this.server = s;
+        this.client = c;
     }
 }

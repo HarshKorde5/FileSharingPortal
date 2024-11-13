@@ -109,9 +109,9 @@ class loginWindow
 
                 // code to turn on hotspot
 
-                hotspot = new configHotspot(hotspotName);
+                // hotspot = new configHotspot(hotspotName);
 
-                hotspot.createHotspot();
+                // hotspot.createHotspot();
 
                 joinObj.availabelLabel.setText("Available rooms : "+hotspotName+"room");
                 
@@ -130,18 +130,10 @@ class loginWindow
                 timer.start();
                 try{Thread.sleep(300);}catch(Exception e){}
 
-                timer1 = new Timer(5000,new ActionListener(){
-                    public void actionPerformed(ActionEvent a)
-                    {
-                        // server = new ServerSide();
 
-                        // server.startServer();
-
-                    }
-                });
-
-                timer1.start();
-
+                        server = new ServerSide(sharingObj);
+                        server.create();
+                        sharingObj.setDriver(server,null);
 
             }
         });
@@ -153,9 +145,9 @@ class loginWindow
                 joinObj.infoLabel.setText("<html><p>Ask the other user to click \"Create\" and wait for the connection to establish</p></html>");
                 joinObj.hotspotName = hotspotName;
 
-                wifi = new configWifi();
+                // wifi = new configWifi();
 
-                room = wifi.searchRoom();
+                // room = wifi.searchRoom();
                 
                 if(room.equals("0"))
                 {
@@ -164,7 +156,7 @@ class loginWindow
                 {
                     joinObj.availabelLabel.setText("Available rooms : "+room);
                     roomFound = true;
-                    connected = wifi.connectRoom();
+                    // connected = wifi.connectRoom();
                 }
 
                 crd.show(mainPanel,"3");
@@ -187,20 +179,18 @@ class loginWindow
 
                 try{Thread.sleep(300);}catch(Exception e){}
 
-                timer1 = new Timer(15000,new ActionListener(){
-                    public void actionPerformed(ActionEvent a)
-                    {
-                        // client = new ClientSide();
-                    }
-                });
+                        client = new ClientSide(sharingObj);
+                        client.create();
+                        sharingObj.setDriver(null,client);
 
-                timer1.start();
+
+
+
+
 
             }
         });
 
-
-        
 
     }
 }
