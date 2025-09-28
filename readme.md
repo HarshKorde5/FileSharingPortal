@@ -59,7 +59,7 @@ The project also makes use of **multi-threading** so the GUI remains responsive 
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 - Works only on Linux (because of `nmcli`).  
 - No encryption (files are sent in plain form).  
 - Only one file transfer at a time.  
@@ -67,7 +67,7 @@ The project also makes use of **multi-threading** so the GUI remains responsive 
 
 ---
 
-## 🌱 Future Improvements
+## Future Improvements
 - Cross-platform support (Windows/Mac).  
 - Add file encryption for secure transfer.  
 - Support multiple file transfers and queues.  
@@ -76,7 +76,7 @@ The project also makes use of **multi-threading** so the GUI remains responsive 
 
 ---
 
-## 🎯 Learning Outcomes
+## Learning Outcomes
 This project helped me understand:  
 - Basics of Java networking (Sockets, IP).  
 - GUI programming with AWT & Swing.  
