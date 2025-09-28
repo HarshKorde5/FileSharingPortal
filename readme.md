@@ -16,27 +16,27 @@ The project also makes use of **multi-threading** so the GUI remains responsive 
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 - **Java** (Core, AWT, Swing, Sockets, Multi-threading)  
 - **Linux CLI** (`nmcli` for Wi-Fi/Hotspot setup)  
 - **Networking** (IP discovery, socket-based transfer)  
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 > All source files are inside the `src/` folder.  
 
 ---
 
-## ⚙️ Prerequisites
+## Prerequisites
 - Linux laptop/PC with Wi-Fi capability.  
 - Java (JDK 8 or above).  
 - Two laptops connected to the same Wi-Fi/Hotspot.  
 
 ---
 
-## 📥 How to Run
+## How to Run
 1. Clone the repository:
    ```bash
    git clone https://github.com/HarshKorde5/FileSharingPortal
@@ -48,22 +48,14 @@ The project also makes use of **multi-threading** so the GUI remains responsive 
    javac *.java
    ```
 
-3. Start the **receiver** (on Laptop B):
+3. Start the application on both the Laptops:
    ```bash
-   java Receiver
+   java Login
    ```
 
-4. Start the **sender** (on Laptop A):
-   ```bash
-   java Sender
-   ```
+4. Select alternate option send / recieve on laptops 
 
 5. Use the **GUI** to select a file and send it.  
-
----
-
-## 📸 Screenshots (Optional)
-*(Add screenshots of your GUI here if you have any)*  
 
 ---
 
