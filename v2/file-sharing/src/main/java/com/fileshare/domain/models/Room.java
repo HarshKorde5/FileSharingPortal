@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fileshare.domain.enums.PeerRole;
+
 public class Room {
 
     private final UUID roomId;
@@ -71,5 +73,9 @@ public class Room {
                 ", roomCode='" + roomCode + '\'' +
                 ", members=" + members.size() +
                 '}';
+    }
+
+    public Peer getHost() {
+        return members.stream().filter(peer -> peer.getRole() == PeerRole.HOST).findFirst().orElseThrow();
     }
 }
