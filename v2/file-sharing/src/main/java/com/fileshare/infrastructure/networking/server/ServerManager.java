@@ -7,7 +7,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.fileshare.infrastructure.networking.client.ClientConnection;
+import com.fileshare.infrastructure.networking.handlers.DefaultTransferMessageHandler;
 import com.fileshare.infrastructure.networking.handlers.MessageProcessor;
+import com.fileshare.infrastructure.networking.handlers.TransferMessageHandler;
 
 public class ServerManager {
 
@@ -18,6 +20,7 @@ public class ServerManager {
     private final ClientRegistry clientRegistry;
     private final RoomBroadcaster broadcaster;
     private final TransferRouter transferRouter;
+    private final TransferMessageHandler transferHandler;
 
     public ServerManager(int port, MessageProcessor processor) {
 
@@ -28,6 +31,7 @@ public class ServerManager {
         this.broadcaster = new RoomBroadcaster(roomRegistry);
         this.clientRegistry = new ClientRegistry();
         this.transferRouter = new TransferRouter(clientRegistry);
+        this.transferHandler = new DefaultTransferMessageHandler(transferRouter);
     }
 
     public void start() throws IOException {
@@ -43,7 +47,7 @@ public class ServerManager {
                 try{
                     ClientConnection connection = new ClientConnection(socket);
 
-                    connectionPool.submit(new ConnectionHandler(connection, processor,roomRegistry, broadcaster, clientRegistry, transferRouter));
+                    connectionPool.submit(new ConnectionHandler(connection, processor,roomRegistry, broadcaster, clientRegistry, transferRouter, transferHandler));
                 }catch(IOException e){
                     socket.close();
                 }

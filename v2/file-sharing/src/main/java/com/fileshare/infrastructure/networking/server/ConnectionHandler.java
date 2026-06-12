@@ -2,13 +2,12 @@ package com.fileshare.infrastructure.networking.server;
 
 import com.fileshare.infrastructure.networking.client.ClientConnection;
 import com.fileshare.infrastructure.networking.handlers.MessageProcessor;
+import com.fileshare.infrastructure.networking.handlers.TransferMessageHandler;
 import com.fileshare.infrastructure.networking.protocol.JsonMapper;
 import com.fileshare.infrastructure.networking.protocol.MessageFactory;
 import com.fileshare.infrastructure.networking.protocol.MessageType;
 import com.fileshare.infrastructure.networking.protocol.NetworkMessage;
 import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomSuccessPayload;
-import com.fileshare.infrastructure.networking.protocol.payload.FileTransferRejectedPayload;
-import com.fileshare.infrastructure.networking.protocol.payload.FileTransferRequestPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.JoinRoomSuccessPayload;
 
 public class ConnectionHandler implements Runnable {
@@ -22,7 +21,9 @@ public class ConnectionHandler implements Runnable {
     private final TransferRouter transferRouter;
     private final ConnectionContext context;
 
-    public ConnectionHandler(ClientConnection clientConnection,MessageProcessor processor,RoomRegistry roomRegistry,RoomBroadcaster broadcaster,ClientRegistry clientRegistry,  TransferRouter transferRouter) {
+    private final TransferMessageHandler transferMessageHandler;
+
+    public ConnectionHandler(ClientConnection clientConnection,MessageProcessor processor,RoomRegistry roomRegistry,RoomBroadcaster broadcaster,ClientRegistry clientRegistry,  TransferRouter transferRouter, TransferMessageHandler transferMessageHandler) {
 
         this.clientConnection = clientConnection;
         this.processor = processor;
@@ -31,6 +32,8 @@ public class ConnectionHandler implements Runnable {
         this.clientRegistry = clientRegistry;
         this.transferRouter = transferRouter;
         this.context = new ConnectionContext(clientConnection);
+        this.transferMessageHandler = transferMessageHandler;
+
     }
 
     @Override
@@ -45,9 +48,10 @@ public class ConnectionHandler implements Runnable {
                 if (request == null) {
                     break;
                 }
-                if (request.type() == MessageType.FILE_TRANSFER_REQUEST) {
+                
+                if (isTransferMessage(request)) {
 
-                    handleTransferRequest(request);
+                    transferMessageHandler.handle(request);
 
                     continue;
                 }
@@ -122,15 +126,13 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-    private void handleTransferRequest(NetworkMessage request)throws Exception {
-        FileTransferRequestPayload payload = JsonMapper.getInstance().readValue(request.payload(),FileTransferRequestPayload.class);
+    private boolean isTransferMessage(
+        NetworkMessage message) {
 
-        boolean delivered = transferRouter.routeToPeer(payload.receiverPeerId(),request);
-
-        if (!delivered) {
-            NetworkMessage rejected = MessageFactory.fileTransferRejected(new FileTransferRejectedPayload(payload.roomCode(),payload.senderPeerId(),payload.receiverPeerId(),payload.fileName(),"Receiver is offline"));
-
-            clientConnection.write(rejected);
-        }
+        return switch (message.type()) {
+            case FILE_TRANSFER_REQUEST,FILE_TRANSFER_ACCEPTED,FILE_TRANSFER_REJECTED ->true;
+            default -> false;
+        };
     }
+
 }
