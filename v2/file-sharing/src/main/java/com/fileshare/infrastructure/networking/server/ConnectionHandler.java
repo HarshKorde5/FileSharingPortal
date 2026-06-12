@@ -18,9 +18,31 @@ public class ConnectionHandler implements Runnable {
     @Override
     public void run() {
 
-        System.out.println("Client connected: "+ clientConnection.getRemoteAddress());
+        try {
 
-        NetworkMessage response = processor.process(MessageFactory.heartbeat());
-        System.out.println(response);
+            while (true) {
+
+                NetworkMessage request = clientConnection.read();
+
+                if (request == null) {
+                    break;
+                }
+
+                NetworkMessage response = processor.process(request);
+
+                clientConnection.write(response);
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            try {
+                clientConnection.close();
+            } catch (Exception ignored) {
+            }
+        }
     }
 }

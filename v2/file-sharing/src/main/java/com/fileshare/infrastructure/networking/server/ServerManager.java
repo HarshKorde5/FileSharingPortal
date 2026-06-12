@@ -32,9 +32,13 @@ public class ServerManager {
 
                 Socket socket = serverSocket.accept();
 
-                ClientConnection connection = new ClientConnection(socket);
+                try{
+                    ClientConnection connection = new ClientConnection(socket);
 
-                connectionPool.submit(new ConnectionHandler(connection, processor));
+                    connectionPool.submit(new ConnectionHandler(connection, processor));
+                }catch(IOException e){
+                    socket.close();
+                }
             }
         }
     }
