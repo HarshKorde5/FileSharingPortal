@@ -1,6 +1,8 @@
 package com.fileshare.infrastructure.networking.server;
 
 import com.fileshare.infrastructure.networking.client.ClientConnection;
+import com.fileshare.infrastructure.networking.protocol.MessageFactory;
+import com.fileshare.infrastructure.networking.protocol.NetworkMessage;
 
 public class ConnectionHandler implements Runnable {
 
@@ -12,12 +14,11 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
+
         System.out.println("Client connected: "+ clientConnection.getRemoteAddress());
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        NetworkMessage message = MessageFactory.heartbeat();
+
+        System.out.println("Protocol initialized: "+ message.type());
     }
 }
