@@ -89,3 +89,6 @@ Thumbs.db
 # =========================
 generated/
 out/
+
+.github
+.gitignore
