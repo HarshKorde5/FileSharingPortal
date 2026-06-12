@@ -10,7 +10,9 @@ import com.fileshare.infrastructure.networking.protocol.JsonMapper;
 import com.fileshare.infrastructure.networking.protocol.MessageType;
 import com.fileshare.infrastructure.networking.protocol.NetworkMessage;
 import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomSuccessPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.JoinRoomPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.JoinRoomSuccessPayload;
 
 public class DefaultMessageProcessor implements MessageProcessor {
 
@@ -36,14 +38,17 @@ public class DefaultMessageProcessor implements MessageProcessor {
     }
 
     private NetworkMessage handleCreateRoom(NetworkMessage message) throws Exception {
-
         CreateRoomPayload payload = JsonMapper.getInstance().readValue(message.payload(),CreateRoomPayload.class);
 
         CreateRoomRequest request = new CreateRoomRequest(payload.username(),payload.ipAddress());
 
         CreateRoomResponse response =createRoomUseCase.execute(request);
 
-        return new NetworkMessage(MessageType.CREATE_ROOM_RESPONSE,response.roomCode());
+        CreateRoomSuccessPayload successPayload = new CreateRoomSuccessPayload(response.roomCode(),response.hostUsername());
+
+        String jsonPayload = JsonMapper.getInstance().writeValueAsString(successPayload);
+
+        return new NetworkMessage(MessageType.CREATE_ROOM_RESPONSE,jsonPayload);
     }
 
     private NetworkMessage handleJoinRoom(NetworkMessage message) throws Exception {
@@ -54,6 +59,10 @@ public class DefaultMessageProcessor implements MessageProcessor {
 
         JoinRoomResponse response = joinRoomUseCase.execute(request);
 
-        return new NetworkMessage(MessageType.JOIN_ROOM_RESPONSE,response.roomCode());
+        JoinRoomSuccessPayload successPayload = new JoinRoomSuccessPayload(response.roomCode(),response.username(),response.memberCount());
+
+        String jsonPayload = JsonMapper.getInstance().writeValueAsString(successPayload);
+
+        return new NetworkMessage(MessageType.JOIN_ROOM_RESPONSE,jsonPayload);
     }
 }

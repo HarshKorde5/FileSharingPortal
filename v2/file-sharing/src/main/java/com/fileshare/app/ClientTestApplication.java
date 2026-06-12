@@ -3,6 +3,8 @@ package com.fileshare.app;
 import com.fileshare.infrastructure.networking.client.ClientManager;
 import com.fileshare.infrastructure.networking.protocol.MessageFactory;
 import com.fileshare.infrastructure.networking.protocol.NetworkMessage;
+import com.fileshare.infrastructure.networking.protocol.JsonMapper;
+import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomSuccessPayload;
 
 public class ClientTestApplication {
 
@@ -12,9 +14,13 @@ public class ClientTestApplication {
 
         client.connect();
 
-        NetworkMessage response =client.send(MessageFactory.createRoom("Harsh","127.0.0.1"));
+        NetworkMessage response = client.send(MessageFactory.createRoom("Harsh","127.0.0.1"));
 
-        System.out.println("Server Response: "+ response);
+        CreateRoomSuccessPayload payload = JsonMapper.getInstance().readValue(response.payload(),CreateRoomSuccessPayload.class);
+
+        System.out.println("Room Code : " + payload.roomCode());
+
+        System.out.println("Host : " + payload.hostUsername());
 
         client.disconnect();
     }
