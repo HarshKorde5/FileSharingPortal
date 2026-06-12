@@ -1,6 +1,9 @@
 package com.fileshare.infrastructure.networking.protocol;
 
 import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.FileTransferAcceptedPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.FileTransferRejectedPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.FileTransferRequestPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.JoinRoomPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.PeerJoinedPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.PeerLeftPayload;
@@ -64,6 +67,35 @@ public final class MessageFactory {
             throw new RuntimeException(e);
         }
     }
+
+    public static NetworkMessage fileTransferRequest(FileTransferRequestPayload payload) {
+
+        try {
+            String json = JsonMapper.getInstance().writeValueAsString(payload);
+
+            return new NetworkMessage(MessageType.FILE_TRANSFER_REQUEST,json);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static NetworkMessage fileTransferAccepted(FileTransferAcceptedPayload payload) {
+        try {
+            String json = JsonMapper.getInstance().writeValueAsString(payload);
+            return new NetworkMessage(MessageType.FILE_TRANSFER_ACCEPTED,json);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     
+    public static NetworkMessage fileTransferRejected(FileTransferRejectedPayload payload) {
+        try {
+            String json = JsonMapper.getInstance().writeValueAsString(payload);
+            return new NetworkMessage(MessageType.FILE_TRANSFER_REJECTED,json);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

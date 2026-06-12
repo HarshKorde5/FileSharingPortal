@@ -23,4 +23,14 @@ public class ClientRegistry {
     public boolean contains(UUID peerId) {
         return clients.containsKey(peerId);
     }
+
+    public ConnectionContext findOrThrow(UUID peerId) {
+        ConnectionContext context = clients.get(peerId);
+
+        if (context == null) {
+            throw new IllegalArgumentException("Peer not connected: " + peerId);
+        }
+
+        return context;
+    }
 }
