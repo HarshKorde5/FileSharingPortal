@@ -43,12 +43,12 @@ public class Room {
     }
 
     public void addMember(Peer peer) {
+        Objects.requireNonNull(peer);
 
-        Objects.requireNonNull(peer, "Peer cannot be null.");
-
-        if (!members.contains(peer)) {
-            members.add(peer);
+        if (members.contains(peer)) {
+            throw new IllegalArgumentException("Peer already exists in room.");
         }
+        members.add(peer);
     }
 
     public void removeMember(Peer peer) {

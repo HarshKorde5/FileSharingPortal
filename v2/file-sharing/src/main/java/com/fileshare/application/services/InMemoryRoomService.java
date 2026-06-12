@@ -26,4 +26,14 @@ public class InMemoryRoomService implements RoomService {
 
         return room;
     }
+
+    @Override
+    public Room findByRoomCode(String roomCode) {
+        return rooms.get(roomCode);
+    }
+
+    @Override
+    public void save(Room room) {
+        rooms.put(room.getRoomCode(), room);
+    }
 }

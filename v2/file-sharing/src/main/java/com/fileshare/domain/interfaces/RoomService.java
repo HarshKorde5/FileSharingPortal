@@ -5,4 +5,8 @@ import com.fileshare.domain.models.Room;
 public interface RoomService {
 
     Room createRoom(String username, String ipAddress);
+
+    Room findByRoomCode(String roomCode);
+
+    void save(Room room);
 }
