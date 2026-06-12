@@ -15,6 +15,7 @@ public class ServerManager {
     private final MessageProcessor processor;
     private final ExecutorService connectionPool;
     private final RoomRegistry roomRegistry;
+    private final ClientRegistry clientRegistry;
     private final RoomBroadcaster broadcaster;
 
     public ServerManager(int port, MessageProcessor processor) {
@@ -24,6 +25,7 @@ public class ServerManager {
         this.connectionPool = Executors.newCachedThreadPool();
         this.roomRegistry = new RoomRegistry();
         this.broadcaster = new RoomBroadcaster(roomRegistry);
+        this.clientRegistry = new ClientRegistry();
     }
 
     public void start() throws IOException {
@@ -39,7 +41,7 @@ public class ServerManager {
                 try{
                     ClientConnection connection = new ClientConnection(socket);
 
-                    connectionPool.submit(new ConnectionHandler(connection, processor,roomRegistry, broadcaster));
+                    connectionPool.submit(new ConnectionHandler(connection, processor,roomRegistry, broadcaster, clientRegistry));
                 }catch(IOException e){
                     socket.close();
                 }

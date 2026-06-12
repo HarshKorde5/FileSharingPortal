@@ -44,7 +44,7 @@ public class DefaultMessageProcessor implements MessageProcessor {
 
         CreateRoomResponse response =createRoomUseCase.execute(request);
 
-        CreateRoomSuccessPayload successPayload = new CreateRoomSuccessPayload(response.roomCode(),response.hostUsername());
+        CreateRoomSuccessPayload successPayload = new CreateRoomSuccessPayload(response.roomCode(),response.hostUsername(), response.peerId());
 
         String jsonPayload = JsonMapper.getInstance().writeValueAsString(successPayload);
 
@@ -59,7 +59,7 @@ public class DefaultMessageProcessor implements MessageProcessor {
 
         JoinRoomResponse response = joinRoomUseCase.execute(request);
 
-        JoinRoomSuccessPayload successPayload = new JoinRoomSuccessPayload(response.roomCode(),response.username(),response.memberCount());
+        JoinRoomSuccessPayload successPayload = new JoinRoomSuccessPayload(response.roomCode(),response.username(), response.peerId(), response.memberCount());
 
         String jsonPayload = JsonMapper.getInstance().writeValueAsString(successPayload);
 

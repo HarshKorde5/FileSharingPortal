@@ -40,6 +40,7 @@ public class JoinRoomUseCase {
         return new JoinRoomResponse(
                 room.getRoomCode(),
                 participant.getUsername(),
+                participant.getPeerId(),
                 room.memberCount());
     }
 }

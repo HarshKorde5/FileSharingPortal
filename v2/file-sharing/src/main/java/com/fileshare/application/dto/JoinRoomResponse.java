@@ -1,3 +1,10 @@
 package com.fileshare.application.dto;
 
-public record JoinRoomResponse(String roomCode,String username,int memberCount) {}
+import java.util.UUID;
+
+public record JoinRoomResponse(
+        String roomCode,
+        String username,
+        UUID peerId,
+        int memberCount) {
+}

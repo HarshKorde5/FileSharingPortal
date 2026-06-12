@@ -17,6 +17,6 @@ public class CreateRoomUseCase {
 
         Room room = roomService.createRoom(request.username(),request.ipAddress());
 
-        return new CreateRoomResponse(room.getRoomCode(),room.getHost().getUsername());
+        return new CreateRoomResponse(room.getRoomCode(),room.getHost().getUsername(), room.getHost().getPeerId());
     }
 }
