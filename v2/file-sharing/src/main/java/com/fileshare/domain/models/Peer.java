@@ -3,7 +3,7 @@ package com.fileshare.domain.models;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.fileshare.enums.PeerRole;
+import com.fileshare.domain.enums.PeerRole;
 
 public class Peer {
 
