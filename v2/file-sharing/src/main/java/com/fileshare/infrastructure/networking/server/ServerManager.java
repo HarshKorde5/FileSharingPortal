@@ -17,6 +17,7 @@ public class ServerManager {
     private final RoomRegistry roomRegistry;
     private final ClientRegistry clientRegistry;
     private final RoomBroadcaster broadcaster;
+    private final TransferRouter transferRouter;
 
     public ServerManager(int port, MessageProcessor processor) {
 
@@ -26,6 +27,7 @@ public class ServerManager {
         this.roomRegistry = new RoomRegistry();
         this.broadcaster = new RoomBroadcaster(roomRegistry);
         this.clientRegistry = new ClientRegistry();
+        this.transferRouter = new TransferRouter(clientRegistry);
     }
 
     public void start() throws IOException {
@@ -41,7 +43,7 @@ public class ServerManager {
                 try{
                     ClientConnection connection = new ClientConnection(socket);
 
-                    connectionPool.submit(new ConnectionHandler(connection, processor,roomRegistry, broadcaster, clientRegistry));
+                    connectionPool.submit(new ConnectionHandler(connection, processor,roomRegistry, broadcaster, clientRegistry, transferRouter));
                 }catch(IOException e){
                     socket.close();
                 }

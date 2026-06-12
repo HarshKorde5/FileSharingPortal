@@ -7,6 +7,8 @@ import com.fileshare.infrastructure.networking.protocol.MessageFactory;
 import com.fileshare.infrastructure.networking.protocol.MessageType;
 import com.fileshare.infrastructure.networking.protocol.NetworkMessage;
 import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomSuccessPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.FileTransferRejectedPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.FileTransferRequestPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.JoinRoomSuccessPayload;
 
 public class ConnectionHandler implements Runnable {
@@ -17,17 +19,17 @@ public class ConnectionHandler implements Runnable {
     private final RoomRegistry roomRegistry;
     private final RoomBroadcaster broadcaster;
     private final ClientRegistry clientRegistry;
-
+    private final TransferRouter transferRouter;
     private final ConnectionContext context;
 
-    public ConnectionHandler(ClientConnection clientConnection,MessageProcessor processor,RoomRegistry roomRegistry,RoomBroadcaster broadcaster,ClientRegistry clientRegistry) {
+    public ConnectionHandler(ClientConnection clientConnection,MessageProcessor processor,RoomRegistry roomRegistry,RoomBroadcaster broadcaster,ClientRegistry clientRegistry,  TransferRouter transferRouter) {
 
         this.clientConnection = clientConnection;
         this.processor = processor;
         this.roomRegistry = roomRegistry;
         this.broadcaster = broadcaster;
         this.clientRegistry = clientRegistry;
-
+        this.transferRouter = transferRouter;
         this.context = new ConnectionContext(clientConnection);
     }
 
@@ -42,6 +44,12 @@ public class ConnectionHandler implements Runnable {
 
                 if (request == null) {
                     break;
+                }
+                if (request.type() == MessageType.FILE_TRANSFER_REQUEST) {
+
+                    handleTransferRequest(request);
+
+                    continue;
                 }
 
                 NetworkMessage response = processor.process(request);
@@ -111,6 +119,18 @@ public class ConnectionHandler implements Runnable {
         if (context.getRoomCode() != null) {
 
             roomRegistry.removeClient(context.getRoomCode(),context);
+        }
+    }
+
+    private void handleTransferRequest(NetworkMessage request)throws Exception {
+        FileTransferRequestPayload payload = JsonMapper.getInstance().readValue(request.payload(),FileTransferRequestPayload.class);
+
+        boolean delivered = transferRouter.routeToPeer(payload.receiverPeerId(),request);
+
+        if (!delivered) {
+            NetworkMessage rejected = MessageFactory.fileTransferRejected(new FileTransferRejectedPayload(payload.roomCode(),payload.senderPeerId(),payload.receiverPeerId(),payload.fileName(),"Receiver is offline"));
+
+            clientConnection.write(rejected);
         }
     }
 }
