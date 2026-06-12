@@ -7,16 +7,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.fileshare.infrastructure.networking.client.ClientConnection;
+import com.fileshare.infrastructure.networking.handlers.MessageProcessor;
 
 public class ServerManager {
 
     private final int port;
+    private final MessageProcessor processor;
     private final ExecutorService connectionPool;
 
-    public ServerManager(int port) {
+    public ServerManager(int port, MessageProcessor processor) {
 
         this.port = port;
-
+        this.processor = processor;
         this.connectionPool = Executors.newCachedThreadPool();
     }
 
@@ -32,7 +34,7 @@ public class ServerManager {
 
                 ClientConnection connection = new ClientConnection(socket);
 
-                connectionPool.submit(new ConnectionHandler(connection));
+                connectionPool.submit(new ConnectionHandler(connection, processor));
             }
         }
     }
