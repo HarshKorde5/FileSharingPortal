@@ -1,0 +1,29 @@
+https://developer.android.com/develop/connectivity/wifi/wifi-direct#java
+
+wifi direct
+
+sharedrop.io
+
+
+https://learn.microsoft.com/en-us/windows/win32/nativewifi/using-the-wi-fi-direct-api
+
+
+ip address
+search for ip address range 
+can we search for open ports in a ip range
+can we connect to them
+
+
+
+
+
+
+//turn on hostpot using terminal
+sudo apt-get install network-manager
+sudo nmcli dev wifi hotspot ssid MyHotspot password password123
+nmcli dev wifi show-password
+
+
+
+I built a local file sharing application in Java from scratch — think of it as an AirDrop clone for Linux laptops. The project uses a TCP socket-based client-server model. One user runs the app and clicks 'Create', which starts a ServerSocket listening on port 6969. The other user clicks 'Join', which creates a Socket that connects to the server's IP. Once connected, either side can pick a file using a Swing JFileChooser, and the file is transmitted using DataOutputStream over the socket with a custom length-prefixed binary protocol — first I send the file name length as an int, then the file name bytes, then the file size as an int, then the actual file bytes.
+The GUI is built with Swing using a CardLayout to switch between screens — login, select, create, join, and sharing. To keep the UI responsive during file transfers, all socket operations run on background Java threads. I also explored using Linux's nmcli command-line tool through Java's ProcessBuilder API to programmatically create WiFi hotspots and detect available networks, though that part is commented out in the current version. The project taught me networking fundamentals, multi-threading, GUI programming, and how to integrate OS-level system commands from Java.
