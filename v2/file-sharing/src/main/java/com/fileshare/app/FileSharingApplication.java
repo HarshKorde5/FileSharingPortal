@@ -1,4 +1,4 @@
-package com.fileshare;
+package com.fileshare.app;
 
 public class FileSharingApplication
 {
