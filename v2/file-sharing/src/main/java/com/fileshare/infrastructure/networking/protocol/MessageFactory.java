@@ -3,6 +3,7 @@ package com.fileshare.infrastructure.networking.protocol;
 import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.JoinRoomPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.PeerJoinedPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.PeerLeftPayload;
 
 public final class MessageFactory {
 
@@ -52,4 +53,17 @@ public final class MessageFactory {
             throw new RuntimeException(e);
         }
     }
+
+    public static NetworkMessage peerLeft(String roomCode,String username) {
+        try {
+            String payload =JsonMapper.getInstance().writeValueAsString(new PeerLeftPayload(roomCode,username));
+
+            return new NetworkMessage(MessageType.PEER_LEFT_NOTIFICATION,payload);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+
 }

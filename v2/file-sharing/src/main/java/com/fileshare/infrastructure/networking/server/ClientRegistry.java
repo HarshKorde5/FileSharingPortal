@@ -4,17 +4,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fileshare.infrastructure.networking.client.ClientConnection;
-
 public class ClientRegistry {
 
-    private final Map<UUID, ClientConnection> clients = new ConcurrentHashMap<>();
+    private final Map<UUID, ConnectionContext> clients = new ConcurrentHashMap<>();
 
-    public void register(UUID peerId,ClientConnection connection) {
-        clients.put(peerId, connection);
+    public void register(UUID peerId,ConnectionContext context) {
+        clients.put(peerId, context);
     }
 
-    public ClientConnection find(UUID peerId) {
+    public ConnectionContext find(UUID peerId) {
         return clients.get(peerId);
     }
 

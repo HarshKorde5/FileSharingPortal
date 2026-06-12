@@ -14,13 +14,27 @@ public class RoomBroadcaster {
     }
 
     public void broadcast(String roomCode,NetworkMessage message) {
+        List<ConnectionContext> clients = roomRegistry.getClients(roomCode);
 
-        List<ClientConnection> clients = roomRegistry.getClients(roomCode);
-
-        for (ClientConnection client : clients) {
+        for (ConnectionContext context : clients) {
             try {
-                client.write(message);
+                context.getConnection().write(message);
             } catch (Exception ignored) {}
         }
     }
+
+    public void broadcastExcept(String roomCode,ConnectionContext excludedContext,NetworkMessage message) {
+
+    List<ConnectionContext> clients = roomRegistry.getClients(roomCode);
+
+    for (ConnectionContext context : clients) {
+        if (context == excludedContext) {
+            continue;
+        }
+
+        try {
+            context.getConnection().write(message);
+        } catch (Exception ignored) {}
+    }
+}
 }

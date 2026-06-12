@@ -5,29 +5,38 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.fileshare.infrastructure.networking.client.ClientConnection;
-
 public class RoomRegistry {
 
-    private final Map<String, List<ClientConnection>> rooms = new ConcurrentHashMap<>();
+    private final Map<String, List<ConnectionContext>> rooms = new ConcurrentHashMap<>();
 
-    public void addClient(String roomCode,ClientConnection clientConnection) {
+    public void addClient(String roomCode,ConnectionContext context) {
 
         rooms.computeIfAbsent(roomCode,key -> new CopyOnWriteArrayList<>());
 
-        rooms.get(roomCode).add(clientConnection);
+        rooms.get(roomCode).add(context);
     }
 
-    public List<ClientConnection> getClients(String roomCode) {
+    public List<ConnectionContext> getClients(String roomCode) {
         return rooms.getOrDefault(roomCode,List.of());
     }
 
-    public void removeClient(String roomCode,ClientConnection clientConnection) {
+    public void removeClient(String roomCode,ConnectionContext context) {
 
-        List<ClientConnection> clients = rooms.get(roomCode);
+        List<ConnectionContext> clients = rooms.get(roomCode);
 
         if (clients != null) {
-            clients.remove(clientConnection);
+            clients.remove(context);
         }
     }
+
+    public boolean roomExists(String roomCode) {
+
+        return rooms.containsKey(roomCode);
+    }
+
+    public int roomSize(String roomCode) {
+
+        return getClients(roomCode).size();
+    }
+
 }
