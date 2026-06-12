@@ -2,6 +2,7 @@ package com.fileshare.infrastructure.networking.protocol;
 
 import com.fileshare.infrastructure.networking.protocol.payload.CreateRoomPayload;
 import com.fileshare.infrastructure.networking.protocol.payload.JoinRoomPayload;
+import com.fileshare.infrastructure.networking.protocol.payload.PeerJoinedPayload;
 
 public final class MessageFactory {
 
@@ -39,5 +40,16 @@ public final class MessageFactory {
     public static NetworkMessage disconnect() {
 
         return new NetworkMessage(MessageType.DISCONNECT,"");
+    }
+
+    public static NetworkMessage peerJoined(String roomCode,String username) {
+        try {
+            String payload =JsonMapper.getInstance().writeValueAsString(new PeerJoinedPayload(roomCode,username));
+
+            return new NetworkMessage(MessageType.PEER_JOINED_NOTIFICATION,payload);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
