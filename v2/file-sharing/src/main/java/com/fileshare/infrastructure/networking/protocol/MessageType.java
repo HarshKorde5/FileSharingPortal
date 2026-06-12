@@ -2,8 +2,14 @@ package com.fileshare.infrastructure.networking.protocol;
 
 public enum MessageType {
 
-    CREATE_ROOM,
-    JOIN_ROOM,
+    CREATE_ROOM_REQUEST,
+    CREATE_ROOM_RESPONSE,
+
+    JOIN_ROOM_REQUEST,
+    JOIN_ROOM_RESPONSE,
+
+    PEER_JOINED_NOTIFICATION,
+    PEER_LEFT_NOTIFICATION,
 
     FILE_TRANSFER_REQUEST,
     FILE_TRANSFER_ACCEPTED,
